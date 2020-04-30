@@ -5,9 +5,6 @@ import torch
 from torch import nn
 from collections import OrderedDict
 from torchvision import datasets, transforms, models
-
-means = [0.485, 0.456, 0.406]
-stds = [0.229, 0.224, 0.225]
         
 def save_checkpoint(self, model, checkpoint_path):
         #Save trained model
@@ -40,7 +37,7 @@ def load_checkpoint(filepath, device='cuda'):
 
     return model
 
-def load_classifier(hidden_units=4096):
+def load_classifier(model, output_categories):
     
     #Load classifier for vgg16
     '''
@@ -57,16 +54,19 @@ def load_classifier(hidden_units=4096):
     '''
     
     #Classifier parameters
-    input_size = 25088 #input layer of vgg16- MUST be 25088
-    hidden_sizes = hidden_units #4096 default model value
-    output_size = 102 #102 flower categories in the dataset
+    classifier_input = model.classifier[0].in_features #input layer of vgg16- has 25088
+    classifier_hidden_units = 4096 # 4096 default model value
     
-    classifier = nn.Sequential(OrderedDict([
-        ('fc1', nn.Linear(input_size, hidden_sizes)),
-        ('relu', nn.ReLU()),
-        ('dropout', nn.Dropout(p=0.5)),
-        ('fc2', nn.Linear(hidden_sizes, output_size)),
-        ('output', nn.LogSoftmax(dim=1))]))
+    classifier = nn.Sequential(
+        nn.Linear(classifier_input, classifier_hidden_units, bias=True),
+        nn.ReLU(),
+        nn.Dropout(p=0.5),
+        nn.Linear(classifier_hidden_units, output_categories),
+        nn.LogSoftmax(dim=1) 
+        # Log softmax activation function ensures that sum of all output probabilities is 1 \
+        # - With that we know the confidence the model has for a given class between 0-100%
+    
+    )
 
     return classifier
 

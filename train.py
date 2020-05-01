@@ -24,8 +24,8 @@ class Train:
                     3. folder 'test' with testing data used after training
                     4.  file 'cat_to_name.json' with mapping between label ids and label names
                 output_categories(int): number of output labels that our model shall identify
-                means(array): e.g. [0.485, 0.456, 0.406]
-                stds(array): e.g. [0.229, 0.224, 0.225]
+                means(array): means for the dataset e.g. [0.485, 0.456, 0.406]
+                stds(array): stds for the dataset e.g. [0.229, 0.224, 0.225]
                 model_name(str): Chose model to be trained ("vgg16" or "vgg13")
                     
             Returns:

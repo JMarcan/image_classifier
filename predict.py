@@ -28,11 +28,15 @@ def print_debug(debug_message):
 class Predict:
     def __init__(self, checkpoint_path, category_names, device):
         '''
-            Innitialize trained model
-            Input: 
-                checkpoint_path  = path to a trained model to be used
-                category_names   = path to mapping between class_ids and class_names
-                device           = load for 'cpu' or 'cuda' computation             
+        Innitialize trained model
+
+        Args:
+            checkpoint_path(str): path to a trained model to be used
+            category_names(str):  path to mapping between class_ids and class_names
+            device(str): 'cpu' or 'cuda' computation   
+
+        Returns:
+            None
         '''
         self._checkpointInitialized = False
         self.device = device
@@ -49,15 +53,19 @@ class Predict:
     
     def predict_image(self, image_path, device, top_k, means, stds):
         '''
-        Classify object with its probabilities
-        Input: 
-            imgage_path  = path to the image to be classified
-            device       = computation to be done on 'cpu' or 'cuda'
-            top_k =      = return top K probabilities
-        Output:
+        Classify image with its probabilities
+
+        Args:
+            imgage_path(str): path to the image to be classified
+            device(str): 'cpu' or 'cuda' computation   
+            top_k(int): return top K probabilities 
+            means(array): means for the dataset e.g. [0.485, 0.456, 0.406]
+            stds(array): stds for the dataset e.g. [0.229, 0.224, 0.225]
+
+        Returns:
             printed results: class_ids, class_names, probabilities
-                
         '''
+       
         if self._checkpointInitialized == False:
             print ("ERROR predict_image: checkpoint is not innitialized")
             return
@@ -74,15 +82,19 @@ class Predict:
         print("Probabilities: {0}".format(top_probs))  
     def predict(self, image_path, device, top_k, means, stds):
         '''
-        Classify object with its probabilities
-        Input: 
-            imgage_path  = path to the image to be classified
-            device       = computation to be done on 'cpu' or 'cuda'
-            top_k =      = return top K probabilities
-        Output:
+        Classify image with its probabilities
+
+        Args:
+            imgage_path(str): path to the image to be classified
+            device(str): 'cpu' or 'cuda' computation   
+            top_k(int): return top K probabilities 
+            means(array): means for the dataset e.g. [0.485, 0.456, 0.406]
+            stds(array): stds for the dataset e.g. [0.229, 0.224, 0.225]
+
+        Returns:
             top_probs[], top_classes[]
-                
         '''
+
         if self._checkpointInitialized == False:
             print ("ERROR predict: checkpoint is not innitialized")
             return
@@ -93,14 +105,16 @@ class Predict:
 
     def _get_probs_classes(self, img, top_k):
         '''
-        Classify object with its probabilities
-        Input: 
-            img     = Numpy image
-            top_k   = return top K probabilities
-        Output:
+        Classify image with its probabilities
+
+        Args:
+            img: numpy image  
+            top_k(int): return top K probabilities 
+
+        Returns:
             top_probs[], top_classes[]
-                
         '''
+        
         #Convert numpy to tensor
         image_tensor = torch.from_numpy(img).type(torch.FloatTensor)
         image_tensor.to(self.device)
@@ -136,18 +150,34 @@ class Predict:
         return top_probs, top_classes
     
     def get_class_name(self, class_ids):
+        '''
+        Get class names for given class ids
+
+        Args:
+            class_ids(array)  
+
+        Returns:
+            class_names(array)
+        '''
         #Get name(s) for predicted class_id(s)
         idx_to_class = {val: key for key, val in    
                                       self.model.class_to_idx.items()}
-        flower_names = []
+        class_names = []
         for c in class_ids:
-            flower_names.append(self.label_map[idx_to_class[c]])
+            class_names.append(self.label_map[idx_to_class[c]])
             
-        return flower_names
+        return class_names
     
     def sanity_check(self, device):
-        ''' 
+        '''
         Test on few samples if predict function/model returns expected flower_id
+
+
+        Args:
+            device(str): 'cpu' or 'cuda' computation    
+
+        Returns:
+            None
         '''
         test_results = []
     

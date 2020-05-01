@@ -7,7 +7,17 @@ from collections import OrderedDict
 from torchvision import datasets, transforms, models
         
 def save_checkpoint(model, checkpoint_path, output_categories):
-        #Save trained model
+        '''
+        Save the trained deep learning model
+
+        Args:
+            model: trained deep learning model to be saved
+            checkpoint_path(str): file path where model will be saved
+            output_categories(int): number of output categories recognized by the model
+
+        Returns:
+            None
+        '''
         model.cpu()
         torch.save({'arch': 'vgg16',
                 'state_dict': model.state_dict(), 
@@ -15,9 +25,17 @@ def save_checkpoint(model, checkpoint_path, output_categories):
                 'output_categories': output_categories
                 },checkpoint_path)
         
-def load_checkpoint(filepath, device='cuda'):
-    
-    check = torch.load(filepath, map_location=device)
+def load_checkpoint(checkpoint_path, device='cuda'):
+    '''
+    Loads trained deep learning model
+
+    Args:
+        checkpoint_path(str): file path where model will be saved
+
+    Returns:
+        model: loaded deep learning model
+    '''
+    check = torch.load(checkpoint_path, map_location=device)
     
     if check['arch'] == 'vgg16':
         model = models.vgg16(pretrained = True)
@@ -50,8 +68,18 @@ def load_checkpoint(filepath, device='cuda'):
     return model
 
 def load_classifier(model, output_categories):
+    '''
+    Loads the classifier that we will train
+
+    Args:
+        model: deep learning model for which we create the classifier
+        output_categories(int): number of output categories 
+                                recognized by the model
+
+    Returns:
+        classifier: loaded classifier for a given model
+    '''
     
-    #Load classifier for vgg16
     '''
         # VGG16 classifier structure:
         

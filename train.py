@@ -1,3 +1,7 @@
+'''
+    Module is a console application that trains deep learning model 
+    to predict class for an input image
+'''
 import torch
 from torch import nn
 from torch import optim

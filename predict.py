@@ -1,6 +1,6 @@
 '''
     Module is a console application
-    that predicts flower for an input image based on trained deep learning model
+    that predicts class for an input image based on trained deep learning model
 '''
 #  ======== Imports ======== 
 import torch

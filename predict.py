@@ -47,7 +47,7 @@ class Predict:
         with open(category_names, 'r') as f:
             self.label_map = json.load(f)
     
-    def predict_image(self, image_path, device, top_k):
+    def predict_image(self, image_path, device, top_k, means, stds):
         '''
         Classify object with its probabilities
         Input: 
@@ -58,7 +58,11 @@ class Predict:
             printed results: class_ids, class_names, probabilities
                 
         '''
-        top_probs, top_classes = self.predict(image_path, device, top_k)
+        if self._checkpointInitialized == False:
+            print ("ERROR predict_image: checkpoint is not innitialized")
+            return
+        
+        top_probs, top_classes = self.predict(image_path, device, top_k, means, stds)
         
         #Get names for predicted class_ids
         class_names = self.get_class_name(top_classes)
@@ -68,7 +72,7 @@ class Predict:
         print("ClassesIDs: {0}".format(top_classes))
         print("Classes_names: {0}".format(class_names))
         print("Probabilities: {0}".format(top_probs))  
-    def predict(self, image_path, device, top_k):
+    def predict(self, image_path, device, top_k, means, stds):
         '''
         Classify object with its probabilities
         Input: 
@@ -80,10 +84,10 @@ class Predict:
                 
         '''
         if self._checkpointInitialized == False:
-            print ("ERROR predict_flower: checkpoint is not innitialized")
+            print ("ERROR predict: checkpoint is not innitialized")
             return
         
-        img = image_utils_lib.process_image(image_path, model_lib.means, model_lib.stds)
+        img = image_utils_lib.process_image(image_path, means, stds)
         top_probs, top_classes = self._get_probs_classes(img, top_k)
         return top_probs, top_classes
 
@@ -126,7 +130,7 @@ class Predict:
         top_classes = top_classes.detach().numpy().tolist()[0]
         
 
-        print_debug("Top_probs po uprave:")
+        print_debug("Top_probs after adjustment:")
         print_debug(top_probs)
         
         return top_probs, top_classes
@@ -177,12 +181,13 @@ class Predict:
 # # ======== Main ======== 
         
 parser = argparse.ArgumentParser() 
-parser.add_argument("input", help="path to an image you want to classify")  
-parser.add_argument("checkpoint", help="path to a model checkpoint you want to load. The image is then predicted based on this model")  
+parser.add_argument("--input", help="path to an image you want to classify")  
+parser.add_argument("--checkpoint", help="path to a model checkpoint you want to load. The image is then predicted based on this model")  
 parser.add_argument("--top_k", type=int, default=1, help="specify number of top K most likely classes. Default is one")  
 parser.add_argument("--category_names", default="cat_to_name.json", help="specify path to your custom mapping of categories to real names. Default is 'cat_to_name.json'")  
-parser.add_argument("--gpu", action="store_const", const="cuda", default="cpu", help="use GPU during the computation. Default is CPU")  
-
+parser.add_argument("--means", required=False, default=[0.485, 0.456, 0.406], help="image dataset means (provided with dataset)'")  
+parser.add_argument("--stds", required=False, default=[0.229, 0.224, 0.225], help="image dataset stds (provided with dataset)'")  
+parser.add_argument("--device", required=False, default="cpu",choices=["cpu", "gpu"], help="use GPU during the computation. Default is CPU")
 
 args = parser.parse_args()
 
@@ -190,10 +195,12 @@ image_path = args.input
 checkpoint_path = args.checkpoint
 top_k = args.top_k
 category_names = args.category_names
-device = args.gpu
+means = args.means
+stds = args.stds
+device = args.device
 
 p = Predict(checkpoint_path, category_names, device) 
-p.predict_image(image_path, device, top_k)
+p.predict_image(image_path, device, top_k, means, stds)
 
 if debug_mode == True: 
     p.sanity_check(device)

@@ -6,13 +6,14 @@ from torch import nn
 from collections import OrderedDict
 from torchvision import datasets, transforms, models
         
-def save_checkpoint(model, checkpoint_path):
+def save_checkpoint(model, checkpoint_path, output_categories):
         #Save trained model
         model.cpu()
         torch.save({'arch': 'vgg16',
                 'state_dict': model.state_dict(), 
-                'class_to_idx': model.class_to_idx},
-                checkpoint_path)
+                'class_to_idx': model.class_to_idx,
+                'output_categories': output_categories
+                },checkpoint_path)
         
 def load_checkpoint(filepath, device='cuda'):
     
@@ -26,11 +27,23 @@ def load_checkpoint(filepath, device='cuda'):
         print("Error: LoadCheckpoint - Model not recognized")
         return 0   
     
+    output_categories = 2
+    
+    try:
+        if check['output_categories'] >= 2:
+            output_categories = check['output_categories']
+        else:
+            print("Error: LoadCheckpoint - Saved model output categories has invalid value ({0}). Value needs to be 2 or higher.".format(check['output_categories']))
+            return 0
+    except Exception as e: # when ['output_categories'] is not part of save model
+        print("Error: LoadCheckpoint - Saved model does not contain information about output categories: {0}".format(e))
+        return 0
+    
     for param in model.parameters():
         param.requires_grad = False
 
     model.class_to_idx = check['class_to_idx']
-    model.classifier = load_classifier()
+    model.classifier = load_classifier(model, output_categories)
         
     model.load_state_dict(check['state_dict'])
 

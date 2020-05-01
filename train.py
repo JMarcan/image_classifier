@@ -209,7 +209,7 @@ class Train:
         end = time.process_time()
         print("Training finished. Run time: {0}".format(end - start))    
                     
-        model_lib.save_checkpoint(self.model, save_checkpoint_path)
+        model_lib.save_checkpoint(self.model, save_checkpoint_path, self.labels_output_categories)
         print ("Checkpoint saved into file \'{0}\'".format(save_checkpoint_path))
         
     def test_model(self, device):

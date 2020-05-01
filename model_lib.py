@@ -6,9 +6,8 @@ from torch import nn
 from collections import OrderedDict
 from torchvision import datasets, transforms, models
         
-def save_checkpoint(self, model, checkpoint_path):
+def save_checkpoint(model, checkpoint_path):
         #Save trained model
-        model.class_to_idx = self.test_data.class_to_idx  
         model.cpu()
         torch.save({'arch': 'vgg16',
                 'state_dict': model.state_dict(), 

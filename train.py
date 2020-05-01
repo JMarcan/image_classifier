@@ -100,7 +100,7 @@ class Train:
         self.model.classifier = model_lib.load_classifier(self.model, self.labels_output_categories)
         
         # Load naming of output categories
-        self.model.class_to_idx = self.train_data.class_to_idx
+        self.model.class_to_idx = train_data.class_to_idx
         
     def _load_model(self, model_name):
         '''
@@ -120,7 +120,7 @@ class Train:
             raise "Error _load_model: Only vgg16 and vgg13 models are supported"
                 
 
-    def train_model(self, learning_rate, epochs, device):
+    def train_model(self, learning_rate, epochs, device, save_checkpoint_path):
         '''
         Train the deep learning model
 
@@ -132,7 +132,9 @@ class Train:
         Returns:
             None
         '''
-        print ("train_model start. device: {0}".format(device))
+        print ("train_model start. device: \'{0}\' | learnin_rate: {1} | epochs: {2}"\
+               .format(device, learning_rate, epochs))
+            
         start = time.process_time()
     
         criterion = nn.NLLLoss()
@@ -207,8 +209,8 @@ class Train:
         end = time.process_time()
         print("Training finished. Run time: {0}".format(end - start))    
                     
-        self.save_checkpoint(self.model, self.checkpoint_path)
-        print ("Checkpoint saved")
+        model_lib.save_checkpoint(self.model, save_checkpoint_path)
+        print ("Checkpoint saved into file \'{0}\'".format(save_checkpoint_path))
         
     def test_model(self, device):
         self.model.to(device)
@@ -253,26 +255,33 @@ class Train:
 
 # ============= main ==============
 parser = argparse.ArgumentParser() 
-parser.add_argument("data_directory", help="path to an folder containing data folders (training, validation, testing)")  
-parser.add_argument("--save_dir", default="model/checkpoint_script.pth", help="location where to save a model checkpoint. Default is 'model/checkpoint_script.pth'")  
-parser.add_argument("--arch", default="vgg16", choices=["vgg16", "vgg13"], help="Select model for transfer learning. Default is vgg16")  
-parser.add_argument("--learning_rate", type=float, default=0.01, help="specify learning rate for the model. Default is 0.01")  
-parser.add_argument("--hidden_units", type=int, default=4096, help="specify number of hidden layers for the model. Default is 4096")  
-parser.add_argument("--epochs", type=int, default=20, help="specify number of epochs for training. Default is 20")  
-parser.add_argument("--gpu", action="store_const", const="cuda", default="cpu", help="use GPU during the computation. Default is CPU")  
+parser.add_argument("--data_dir", required=True, help="path to an folder containing data folders \ (training, validation, testing) and file cat_to_name.json containing translation between output categories and their names")  
+parser.add_argument("--output_cat", required=True, type=int, help="specify number of output categories for the model")  
+parser.add_argument("--means", required=False, default=[0.485, 0.456, 0.406], help="image dataset means (provided with dataset)'")  
+parser.add_argument("--stds", required=False, default=[0.229, 0.224, 0.225], help="image dataset stds (provided with dataset)'")  
+parser.add_argument("--arch", required=False, default="vgg16", choices=["vgg16", "vgg13"], help="Select model for transfer learning. Default is vgg16")  
+
+
+parser.add_argument("--save_path", required=False, default="assets/model/checkpoint_script.pth", help="location where to save a model checkpoint. Default is 'assets/model/checkpoint_script.pth'")  
+parser.add_argument("--learning_rate", required=False, type=float, default=0.03, help="specify learning rate for the model. Default is 0.03")  
+parser.add_argument("--epochs", required=False, type=int,  default=7, help="specify number of epochs for training. Default is 7")  
+parser.add_argument("--device", required=False, default="cpu",choices=["cpu", "gpu"], help="use GPU during the computation. Default is CPU")  
 
 
 args = parser.parse_args()
 
-data_directory = args.data_directory
-save_dir = args.save_dir
+data_directory = args.data_dir
+output_categories = args.output_cat
+means = args.means
+stds = args.stds
+
+save_path = args.save_path
 arch = args.arch
 learning_rate = args.learning_rate
-hidden_units = args.hidden_units
 epoch = args.epochs
-device = args.gpu
+device = args.device
 
-train_cl = Train(data_directory, arch, hidden_units, device)    
-train_cl.train_model(learning_rate, epoch, device)
+train_cl = Train(data_directory, output_categories, means, stds, arch)    
+train_cl.train_model(learning_rate, epoch, device, save_path)
 train_cl.test_model(device)
         

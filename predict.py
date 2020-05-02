@@ -211,10 +211,10 @@ class Predict:
 # # ======== Main ======== 
         
 parser = argparse.ArgumentParser() 
-parser.add_argument("--input", help="path to an image you want to classify")  
-parser.add_argument("--checkpoint", help="path to a model checkpoint you want to load. The image is then predicted based on this model")  
-parser.add_argument("--top_k", type=int, default=1, help="specify number of top K most likely classes. Default is one")  
-parser.add_argument("--category_names", default="cat_to_name.json", help="specify path to your custom mapping of categories to real names. Default is 'cat_to_name.json'")  
+parser.add_argument("--input", required=True, help="path to an image you want to classify")  
+parser.add_argument("--checkpoint", required=True, help="path to a model checkpoint you want to load. The image is then predicted based on this model")  
+parser.add_argument("--top_k", required=False, type=int, default=1, help="specify number of top K most likely classes. Default is one")  
+parser.add_argument("--category_names", required=False, default="cat_to_name.json", help="specify path to your custom mapping of categories to real names. Default is 'cat_to_name.json'")  
 parser.add_argument("--means", required=False, default=[0.485, 0.456, 0.406], help="image dataset means (provided with dataset)'")  
 parser.add_argument("--stds", required=False, default=[0.229, 0.224, 0.225], help="image dataset stds (provided with dataset)'")  
 parser.add_argument("--device", required=False, default="cpu",choices=["cpu", "gpu"], help="use GPU during the computation. Default is CPU")

@@ -17,13 +17,13 @@ To train the image classifier against your dataset, the transfer learning is use
 Pretrained VGG16 network is loaded and its classifier is replaced by our classifier taking into account the number of output labels your dataset has. 
 This classifier is then retrained to classify your dataset.
 
-The model performed with 81% accuracy against the provided Oxford's Dataset after just 3 epochs of training.  
+The model performed with over 85% accuracy against the provided Oxford's Dataset after just 5 epochs of training.  
 
 ![classification_sample](assets/classification_example.png)
 
 ## Usage
 
-1. Prepare your dataset
+### 1. Prepare your dataset
 1.1. Chose your dataset
 You can use [Oxford's Dataset with 102 flower categories](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html)
 
@@ -37,7 +37,7 @@ If you chose another one, keep in mind that the pre-trained network VGG16 expect
 
 The referenced Oxford's Dataset fulfills it.  
 
-2. Train the image classifier
+### 2. Train the image classifier
 - either by executing training cell in Jupyter notebook or with the console application`
 - Training with the console application `train.py:
    - Basic usage: run `python train.py --data_dir my_directory --output_cat 102`
@@ -55,7 +55,7 @@ The referenced Oxford's Dataset fulfills it.
       6. `--epochs`. Default value: `--epochs 7`. Description: Learning epochs for the training 
       7. `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for training
 
-3. Use the trained image classifier to recognize your images
+### 3. Use the trained image classifier to recognize your images
 - either by executing predict cell in Jupyter notebook or with the console application 
 
 - Predicting with the console application `predict.py`:

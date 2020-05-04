@@ -26,51 +26,51 @@ The model performed with over 85% accuracy against the provided Oxford's Dataset
 ### 1. Prepare your dataset
 1.1. Chose your dataset
 You can use [Oxford's Dataset with 102 flower categories](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html)
-
 If you chose another one, keep in mind that the pre-trained network VGG16 expects to receive image input with size 224x224. It's easier to downsize your images to this size, rather than to increase it without side effects. 
 
 1.2. Prepare your dataset into the right folder structure
-- For the model to work, you need to ensure that data are prepared in one folder with the following subfolders:
-   - `train` for training data
-   - `valid` for validation data used as intermediate feedback during training
-   - `test` for test data used to evaluate trained model performance
+For the model to work, you need to ensure that data are prepared in one folder with the following subfolders:
+- `train` for training data
+- `valid` for validation data used as intermediate feedback during training
+- `test` for test data used to evaluate trained model performance
 
 The referenced Oxford's Dataset fulfills it.  
 
 ### 2. Train the image classifier
-- either by executing training cell in Jupyter notebook or with the console application`
-- Training with the console application `train.py:
-   - Basic usage: run `python train.py --data_dir my_directory --output_cat 102`
+You can train the classifier by executing training cell in Jupyter notebook or with the console application`
 
-   - Mandatory parameters:
-      1. `--data_dir`. Description: Dataset directory used for training 
-      2. `--output_cat`. Description: Number of categories that the classifier needs to recognize
+Training with the console application `train.py:
+- Basic usage: run `python train.py --data_dir my_directory --output_cat 102`
 
-    - Other parameters:
-      1. `--means`. Default value: `--means [0.485, 0.456, 0.406]` (taken from VGG dataset). Description: Image dataset means  
-      2. `--stds`. Default value: `--stds [0.229, 0.224, 0.225]` (taken from VGG dataset). Description: Image dataset stds  
-      3. `--arch`. Default value: `--arch vgg16`. Possible values: `--arch vgg16` or `--arch vgg13`. Description: Choose pretrained network architecture
-      4. `--save_dir`. Default value: `--save_dir assets/model/checkpoint_script.pth`. Description:  Directory to save trained model checkpoint 
-      5. `--learning_rate`. Default value: `--learning_rate 0.03`. Description: Learning rate used during the training  
-      6. `--epochs`. Default value: `--epochs 7`. Description: Learning epochs for the training 
-      7. `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for training
+- Mandatory parameters:
+    - `--data_dir`. Description: Dataset directory used for training 
+    - `--output_cat`. Description: Number of categories that the classifier needs to recognize
+
+- Other parameters:
+    - `--means`. Default value: `--means [0.485, 0.456, 0.406]` (taken from VGG dataset). Description: Image dataset means  
+    - `--stds`. Default value: `--stds [0.229, 0.224, 0.225]` (taken from VGG dataset). Description: Image dataset stds  
+    - `--arch`. Default value: `--arch vgg16`. Possible values: `--arch vgg16` or `--arch vgg13`. Description: Choose pretrained network architecture
+    - `--save_dir`. Default value: `--save_dir assets/model/checkpoint_script.pth`. Description:  Directory to save trained model checkpoint 
+    - `--learning_rate`. Default value: `--learning_rate 0.03`. Description: Learning rate used during the training  
+    - `--epochs`. Default value: `--epochs 7`. Description: Learning epochs for the training 
+    - `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for training
 
 ### 3. Use the trained image classifier to recognize your images
-- either by executing predict cell in Jupyter notebook or with the console application 
+You can use the classifier by executing predict cell in Jupyter notebook or with the console application 
 
-- Predicting with the console application `predict.py`:
-   - Basic usage: run `python predict.py --input "/path/to/image --checkpoint "checkpoint.pth"`
+Predicting with the console application `predict.py`:
+- Basic usage: run `python predict.py --input "/path/to/image --checkpoint "checkpoint.pth"`
 
-   - Mandatory parameters:
-      1. `--input`. Description: Path to an image to be predicted 
-      2. `--checkpoint`. Description: Path to a checkpoint with a trained network to be used
+- Mandatory parameters:
+    - `--input`. Description: Path to an image to be predicted 
+    - `--checkpoint`. Description: Path to a checkpoint with a trained network to be used
 
-   - Other parameters:
-      1. `--top_k`. Default value: `--top_k 1`. Description: Return top K most likely classes
-      2. `--category_names`. Default value: `--category_names cat_to_name.json`. Description: File containing a mapping of categories to their real names
-      3. `--means`. Default value: `--means [0.485, 0.456, 0.406]` (taken from VGG dataset). Description: Image dataset means 
-      4. `--stds`. Default value: `--stds [0.229, 0.224, 0.225]` (taken from VGG dataset). Description: Image dataset stds 
-      5. `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for prediction
+- Other parameters:
+    - `--top_k`. Default value: `--top_k 1`. Description: Return top K most likely classes
+    - `--category_names`. Default value: `--category_names cat_to_name.json`. Description: File containing a mapping of categories to their real names
+    - `--means`. Default value: `--means [0.485, 0.456, 0.406]` (taken from VGG dataset). Description: Image dataset means 
+    - `--stds`. Default value: `--stds [0.229, 0.224, 0.225]` (taken from VGG dataset). Description: Image dataset stds 
+    - `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for prediction
 
 ## Libraries used
 Python 3

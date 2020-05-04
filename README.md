@@ -24,11 +24,14 @@ The model performed with over 85% accuracy against the provided Oxford's Dataset
 ## Usage
 
 ### 1. Prepare your dataset
-1.1. Chose your dataset
+**1.1. Chose your dataset**
+
 You can use [Oxford's Dataset with 102 flower categories](http://www.robots.ox.ac.uk/~vgg/data/flowers/102/index.html)
+
 If you chose another one, keep in mind that the pre-trained network VGG16 expects to receive image input with size 224x224. It's easier to downsize your images to this size, rather than to increase it without side effects. 
 
-1.2. Prepare your dataset into the right folder structure
+**1.2. Prepare your dataset into the right folder structure**
+
 For the model to work, you need to ensure that data are prepared in one folder with the following subfolders:
 - `train` for training data
 - `valid` for validation data used as intermediate feedback during training
@@ -39,7 +42,7 @@ The referenced Oxford's Dataset fulfills it.
 ### 2. Train the image classifier
 You can train the classifier by executing training cell in Jupyter notebook or with the console application`
 
-Training with the console application `train.py:
+**Training with the console application `train.py:**
 - Basic usage: run `python train.py --data_dir my_directory --output_cat 102`
 
 - Mandatory parameters:
@@ -58,7 +61,7 @@ Training with the console application `train.py:
 ### 3. Use the trained image classifier to recognize your images
 You can use the classifier by executing predict cell in Jupyter notebook or with the console application 
 
-Predicting with the console application `predict.py`:
+**Predicting with the console application `predict.py`:**
 - Basic usage: run `python predict.py --input "/path/to/image --checkpoint "checkpoint.pth"`
 
 - Mandatory parameters:

@@ -19,7 +19,7 @@ This classifier is then retrained to classify your dataset.
 
 The model performed with 81% accuracy against the provided Oxford's Dataset after just 3 epochs of training.  
 
-![classification_sample](classification_sample.png)
+![classification_sample](assets/classification_example.png)
 
 ## Usage
 

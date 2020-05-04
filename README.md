@@ -40,6 +40,7 @@ For the model to work, you need to ensure that data are prepared in one folder w
 The referenced Oxford's Dataset fulfills it.  
 
 ### 2. Train the image classifier
+
 You can train the classifier by executing training cell in Jupyter notebook or with the console application`
 
 **Training with the console application `train.py:**
@@ -59,6 +60,7 @@ You can train the classifier by executing training cell in Jupyter notebook or w
     - `--device`. Default value: `--device cpu`. Possible values: `--device cpu` or `--device gpu`. Description: Computing device for training
 
 ### 3. Use the trained image classifier to recognize your images
+
 You can use the classifier by executing predict cell in Jupyter notebook or with the console application 
 
 **Predicting with the console application `predict.py`:**
